@@ -9,8 +9,9 @@ import { classes } from '@automapper/classes';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { BotModule } from './bot/bot.module';
 import * as LocalSession from 'telegraf-session-local';
+import { session } from 'telegraf';
 
-const sessions = new LocalSession({ database: 'session_db.json' });
+// const sessions = new LocalSession({ database: 'session_db.json' });
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ const sessions = new LocalSession({ database: 'session_db.json' });
       strategyInitializer: classes(),
     }),
     TelegrafModule.forRoot({
-      middlewares: [sessions.middleware()],
+      middlewares: [session()],
       token: process.env.BOT_TOKEN,
     }),
     BotModule,

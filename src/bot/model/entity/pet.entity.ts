@@ -19,5 +19,8 @@ export class PetEntity {
   mood: number;
 
   @Column()
+  walk: number;
+
+  @Column()
   health: number;
 }
