@@ -41,4 +41,39 @@ export class StatusScene {
   async onBack(@Ctx() ctx: Context) {
     ctx.scene.leave();
   }
+  @Action(COMMANDS.FEED)
+  async onFEED(@Ctx() ctx: Context) {
+    await this.botService.feed(ctx.from.id);
+    await ctx.replyWithSticker({
+      source: 'src/assets/stickers/lick-dog.tgs',
+    });
+    await ctx.replyWithHTML('Мммм... Вкуснятина!!!',
+      Markup.inlineKeyboard(getStatusKeyBoard(), {
+        columns: 1,
+      }),);
+  }
+
+  @Action(COMMANDS.WALK)
+  async onWalk(@Ctx() ctx: Context) {
+    await this.botService.walk(ctx.from.id);
+    await ctx.replyWithSticker({
+      source: 'src/assets/stickers/smile-dog.tgs',
+    });
+    await ctx.replyWithHTML('Классно погуляли!!! Спасибо!',
+      Markup.inlineKeyboard(getStatusKeyBoard(), {
+        columns: 1,
+      }),);
+  }
+
+  @Action(COMMANDS.PLAY)
+  async onPlay(@Ctx() ctx: Context) {
+    await this.botService.play(ctx.from.id);
+    await ctx.replyWithSticker({
+      source: 'src/assets/stickers/smile-dog.tgs',
+    });
+    await ctx.replyWithHTML('Как весело!!!',
+      Markup.inlineKeyboard(getStatusKeyBoard(), {
+        columns: 1,
+      }),);
+  }
 }
