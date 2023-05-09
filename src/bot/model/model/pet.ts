@@ -10,22 +10,22 @@ export class Pet {
 
   static FULLNESS = {
     PROBLEM: 3,
-    NOT_OK: 8,
+    NOT_OK: 7,
     MAX: 10,
   };
   static WALK = {
     PROBLEM: 3,
-    NOT_OK: 8,
+    NOT_OK: 7,
     MAX: 10,
   };
   static MOOD = {
     PROBLEM: 3,
-    NOT_OK: 8,
+    NOT_OK: 7,
     MAX: 10,
   };
   static HEALTH = {
     PROBLEM: 3,
-    NOT_OK: 8,
+    NOT_OK: 7,
     MAX: 10,
   };
 

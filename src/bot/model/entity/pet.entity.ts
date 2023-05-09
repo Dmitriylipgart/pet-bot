@@ -23,7 +23,7 @@ export class PetEntity {
   name: string;
 
   @AutoMap()
-  @Column({ default: 10 })
+  @Column({ default: 7 })
   fullness: number;
 
   @AutoMap()
@@ -31,7 +31,7 @@ export class PetEntity {
   mood: number;
 
   @AutoMap()
-  @Column({ default: 10 })
+  @Column({ default: 7 })
   walk: number;
 
   @AutoMap()
