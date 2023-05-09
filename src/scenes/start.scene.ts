@@ -1,9 +1,9 @@
 import { SceneList } from '../shared/consts';
-import { Ctx, Hears, Scene, SceneEnter } from 'nestjs-telegraf';
+import { Action, Ctx, Hears, Scene, SceneEnter } from 'nestjs-telegraf';
 import { BotService } from '../bot/bot.service';
 import { Context } from '../bot/model/interfaces/context.interface';
 import { Markup } from 'telegraf';
-import { BUTTONS } from '../bot/bot.buttons';
+import { BUTTONS, COMMANDS } from '../bot/bot.buttons';
 
 @Scene(SceneList.Start)
 export class StartScene {
@@ -27,13 +27,14 @@ export class StartScene {
           `Меня нужно кормить, выгуливать, играть со мной и лечить, если я заболею.`,
           `Я буду самым счастливым щенком на свете, если ты станешь моим хозяином!`,
         ].join('\n'),
-        Markup.keyboard([[BUTTONS.GET_PET]]).resize(),
+        Markup.inlineKeyboard([BUTTONS.GET_PET]),
       );
     } else {
+      await ctx.scene.enter(SceneList.Status);
     }
   }
 
-  @Hears(BUTTONS.GET_PET)
+  @Action(COMMANDS.GET_PET)
   async onNext(@Ctx() context: Context) {
     await context.scene.enter(SceneList.NewPet);
   }

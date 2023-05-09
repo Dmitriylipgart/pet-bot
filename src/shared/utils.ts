@@ -1,6 +1,4 @@
 import { FULLNESS, MOOD, WALK } from './consts';
-import {} from 'telegraf/typings/markup';
-import { Markup } from 'telegraf';
 import { BUTTONS } from '../bot/bot.buttons';
 
 export const resolveFullness = (fullness: number): string => {
@@ -22,5 +20,5 @@ export const resolveMood = (mood: number): string => {
 };
 
 export const getStatusKeyBoard = () => {
-  return [[BUTTONS.FEED], [BUTTONS.WALK], [BUTTONS.PLAY], [BUTTONS.BACK]];
+  return [BUTTONS.FEED, BUTTONS.WALK, BUTTONS.PLAY, BUTTONS.BACK];
 };

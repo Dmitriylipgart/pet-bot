@@ -1,12 +1,22 @@
-import { Ctx, Hears, Message, On, Scene, SceneEnter } from 'nestjs-telegraf';
+import {
+  Action,
+  Ctx,
+  Hears,
+  Message,
+  On,
+  Scene,
+  SceneEnter,
+} from 'nestjs-telegraf';
 import { SceneList } from '../shared/consts';
 import { BotService } from '../bot/bot.service';
 import { Context } from '../bot/model/interfaces/context.interface';
-import { BUTTONS } from '../bot/bot.buttons';
+import { BUTTONS, COMMANDS } from '../bot/bot.buttons';
 import { Markup } from 'telegraf';
+import { PetEntity } from '../bot/model/entity/pet.entity';
+import { UserEntity } from 'src/bot/model/entity/user.entity';
 
 @Scene(SceneList.NewPet)
-export class NewPetWizard {
+export class NewPetScene {
   constructor(private readonly botService: BotService) {}
 
   @SceneEnter()
@@ -21,25 +31,46 @@ export class NewPetWizard {
         `,
         `Как ты меня назовешь? `,
       ].join('\n'),
-      Markup.keyboard([[BUTTONS.BACK]]).resize(),
+      Markup.inlineKeyboard([BUTTONS.BACK]),
     );
   }
 
-  @Hears(BUTTONS.BACK)
+  @Action(COMMANDS.BACK)
   async onBack(@Ctx() context: Context) {
     await context.scene.enter(SceneList.Start);
   }
 
   @On('text')
   async onText(@Message('text') name: string, @Ctx() ctx: Context) {
-    await ctx.replyWithHTML(
-      [`Меня зовут ${name}?`].join('\n'),
-      Markup.keyboard([[BUTTONS.YES]]).resize(),
-    );
+    console.log(ctx, name);
+    if ('text' in ctx.message && name !== '/start') {
+      ctx.state.name = name;
+      ctx.session.__scenes.state['name'] = name;
+      await ctx.replyWithHTML(
+        [`Меня зовут ${name}?`].join('\n'),
+        Markup.inlineKeyboard([[BUTTONS.YES, BUTTONS.NO]]),
+      );
+    }
+    if (name === '/start') {
+      ctx.scene.enter(SceneList.Start);
+    }
   }
 
-  @Hears(BUTTONS.YES)
-  async onYes(@Ctx() context: Context) {
-    await context.scene.enter(SceneList.Start);
+  @Action(COMMANDS.YES)
+  async onYes(@Ctx() ctx: Context) {
+    const pet = new PetEntity();
+    console.log('context name', ctx.session.__scenes.state['name']);
+    pet.name = ctx.session.__scenes.state['name'];
+    const user = new UserEntity();
+    user.id = ctx.from.id;
+    user.pets = [pet];
+    const savedUser = await this.botService.saveUser(user);
+    console.log(savedUser);
+    await ctx.scene.enter(SceneList.Status);
+  }
+
+  @Action(COMMANDS.NO)
+  async onNo(@Ctx() ctx: Context) {
+    ctx.scene.reenter();
   }
 }

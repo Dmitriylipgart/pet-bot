@@ -1,9 +1,15 @@
-import { Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
+import { Action, Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { SceneList } from '../shared/consts';
 import { BotService } from '../bot/bot.service';
 import { Context } from '../bot/model/interfaces/context.interface';
 import { Markup } from 'telegraf';
-import { getStatusKeyBoard, resolveFullness, resolveMood, resolveWalk } from '../shared/utils';
+import {
+  getStatusKeyBoard,
+  resolveFullness,
+  resolveMood,
+  resolveWalk,
+} from '../shared/utils';
+import { COMMANDS } from '../bot/bot.buttons';
 
 @Scene(SceneList.Status)
 export class StatusScene {
@@ -25,7 +31,14 @@ export class StatusScene {
         `🦮 ${resolveWalk(pet.walk)}`,
         `⚽ ${resolveMood(pet.mood)}`,
       ].join('\n'),
-      Markup.keyboard(getStatusKeyBoard()).resize(),
+      Markup.inlineKeyboard(getStatusKeyBoard(), {
+        columns: 1,
+      }),
     );
+  }
+
+  @Action(COMMANDS.BACK)
+  async onBack(@Ctx() ctx: Context) {
+    ctx.scene.leave();
   }
 }

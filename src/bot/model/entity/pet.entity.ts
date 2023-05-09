@@ -12,15 +12,15 @@ export class PetEntity {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ default: 10 })
   fullness: number;
 
-  @Column()
+  @Column({ default: 10 })
   mood: number;
 
-  @Column()
+  @Column({ default: 10 })
   walk: number;
 
-  @Column()
+  @Column({ default: 10 })
   health: number;
 }
