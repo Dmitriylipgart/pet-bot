@@ -1,10 +1,4 @@
-import {
-  Entity,
-  JoinColumn,
-  OneToMany,
-  PrimaryColumn,
-  Relation,
-} from 'typeorm';
+import { Entity, OneToMany, PrimaryColumn, Relation } from 'typeorm';
 import { PetEntity } from './pet.entity';
 
 @Entity()

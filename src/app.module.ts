@@ -9,6 +9,8 @@ import { classes } from '@automapper/classes';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { BotModule } from './bot/bot.module';
 import * as LocalSession from 'telegraf-session-local';
+import { ScheduleModule } from '@nestjs/schedule';
+import { BOT_NAME } from './shared/consts';
 // import { session } from 'telegraf';
 
 const sessions = new LocalSession({ database: 'session_db.json' });
@@ -29,7 +31,11 @@ const sessions = new LocalSession({ database: 'session_db.json' });
       middlewares: [sessions.middleware()],
       token: process.env.BOT_TOKEN,
     }),
+    AutomapperModule.forRoot({
+      strategyInitializer: classes(),
+    }),
     BotModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],
