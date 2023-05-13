@@ -12,7 +12,7 @@ export class StartScene {
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Context) {
     const user = await this.botService.getUser(ctx.from.id);
-    if (!user) {
+    if (!user || !user.pet) {
       await ctx.replyWithSticker({
         source: 'src/assets/stickers/hi-dog.tgs',
       });

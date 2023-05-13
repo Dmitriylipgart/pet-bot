@@ -1,4 +1,4 @@
-import { Entity, OneToMany, PrimaryColumn, Relation } from 'typeorm';
+import { Entity, OneToOne, PrimaryColumn, Relation } from 'typeorm';
 import { PetEntity } from './pet.entity';
 
 @Entity()
@@ -6,9 +6,9 @@ export class UserEntity {
   @PrimaryColumn()
   id: number;
 
-  @OneToMany(() => PetEntity, (pet) => pet.user, {
+  @OneToOne(() => PetEntity, (pet) => pet.user, {
     cascade: true,
     eager: true,
   })
-  pets: Relation<PetEntity[]>;
+  pet: Relation<PetEntity>;
 }

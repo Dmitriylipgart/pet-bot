@@ -7,9 +7,17 @@ import { UserEntity } from './model/entity/user.entity';
 import { StartScene } from '../scenes/start.scene';
 import { NewPetScene } from '../scenes/new-pet.scene';
 import { StatusScene } from '../scenes/status.scene';
+import { PetProfile } from './model/profile/pet.profile';
 
 @Module({
   imports: [TypeOrmModule.forFeature([PetEntity, UserEntity])],
-  providers: [BotService, BotUpdate, StartScene, NewPetScene, StatusScene],
+  providers: [
+    BotService,
+    BotUpdate,
+    StartScene,
+    NewPetScene,
+    StatusScene,
+    PetProfile,
+  ],
 })
 export class BotModule {}

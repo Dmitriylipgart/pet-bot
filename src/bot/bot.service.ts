@@ -11,6 +11,7 @@ import { BOT_NAME } from '../shared/consts';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { Pet } from './model/model/pet';
+import { login } from 'telegraf/typings/button';
 
 @Injectable()
 export class BotService {
@@ -35,46 +36,87 @@ export class BotService {
 
   async getPet(userId: number): Promise<Pet> {
     const user = await this.getUser(userId);
-    return this.classMapper.mapAsync(user.pets[0], PetEntity, Pet);
+    return this.classMapper.mapAsync(user.pet, PetEntity, Pet);
   }
 
   saveUser(user: UserEntity): Promise<UserEntity> {
     return this.userRepository.save(user);
   }
 
-  async feed(userId: number) {
-    const pet = await this.getPet(userId);
+  async feed(id: number): Promise<PetEntity> {
+    const user = await this.userRepository.findOneBy({ id });
+    const { pet: petEntity } = user;
+    const pet = this.classMapper.map(petEntity, PetEntity, Pet);
     pet.increaseFullNess();
-    await this.petRepository.save(this.classMapper.map(pet, Pet, PetEntity));
+    return await this.petRepository.save(
+      this.classMapper.map(pet, Pet, PetEntity),
+    );
   }
 
-  async walk(userId: number) {
+  async walk(userId: number): Promise<PetEntity> {
     const pet = await this.getPet(userId);
     pet.increaseWalk();
-    await this.petRepository.save(this.classMapper.map(pet, Pet, PetEntity));
+    return await this.petRepository.save(
+      this.classMapper.map(pet, Pet, PetEntity),
+    );
   }
 
-  async play(userId: number) {
+  async play(userId: number): Promise<PetEntity> {
     const pet = await this.getPet(userId);
     pet.increaseMood();
-    await this.petRepository.save(this.classMapper.map(pet, Pet, PetEntity));
+    return await this.petRepository.save(
+      this.classMapper.map(pet, Pet, PetEntity),
+    );
   }
 
-  // @Cron('0 0 8-22/2 ? * *')
-  @Cron('*/10 * * * * *')
-  // @Cron(CronExpression.EVERY_5_SECONDS)
+  // update pet status job starts every 4 hours from 8am to 10pm
+  @Cron('0 8-22/4 * * *')
+  // for testing only. starts every 10 seconds
+  // @Cron('*/10 * * * * *')
   async updatePetStatus() {
-    const pets = await this.classMapper.mapArrayAsync(
-      await this.petRepository.find({ relations: ['user'] }),
-      PetEntity,
-      Pet,
-    );
+    const petEntities = await this.petRepository.find({ relations: ['user'] });
 
-    pets.forEach((pet) => {
+    petEntities.forEach((petEntity) => {
+      const pet = this.classMapper.map(petEntity, PetEntity, Pet);
       pet.updateStatus();
-      const petEntity = this.classMapper.map(pet, Pet, PetEntity);
-      console.log(petEntity);
-      this.petRepository.save(petEntity);
+      if (pet.isAlive()) {
+        const petEntity2 = this.classMapper.map(pet, Pet, PetEntity);
+        this.petRepository.save(petEntity2);
+        if (pet.isSick()) {
+          this.bot.telegram.sendMessage(
+            petEntity.user.id,
+            'Кажется я заболел. \n Мне очень плохо.',
+          );
+          return;
+        }
+        if (pet.isStarving()) {
+          this.bot.telegram.sendMessage(
+            petEntity.user.id,
+            'Я очень хочу кушать!!! \n Покорми меня.',
+          );
+          return;
+        }
+        if (pet.isSad()) {
+          this.bot.telegram.sendMessage(
+            petEntity.user.id,
+            '😔 Мне грустно. \n  Поиграй со мной.',
+          );
+          return;
+        }
+        if (pet.needsToWalk()) {
+          this.bot.telegram.sendMessage(
+            petEntity.user.id,
+            'Мне нужно погулять. \n Очено срочно.',
+          );
+          return;
+        }
+      } else {
+        this.bot.telegram.sendMessage(
+          petEntity.user.id,
+          `☠️ Ваш питомец ${petEntity.name} умер.`,
+        );
+        this.petRepository.delete(pet.id);
+      }
     });
   }
 }

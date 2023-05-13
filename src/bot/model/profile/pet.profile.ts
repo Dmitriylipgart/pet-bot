@@ -1,6 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
-import { createMap, Mapper } from '@automapper/core';
+import {
+  createMap,
+  forMember,
+  ignore,
+  mapFrom,
+  Mapper,
+} from '@automapper/core';
 import { PetEntity } from '../entity/pet.entity';
 import { Pet } from '../model/pet';
 
@@ -12,14 +18,26 @@ export class PetProfile extends AutomapperProfile {
 
   override get profile() {
     return (mapper) => {
-      createMap(mapper, Pet, PetEntity);
-      createMap(mapper, PetEntity, Pet);
-      // createMap(
-      //   mapper,
-      //   EventCreateDto,
-      //   Event,
-      //   forMember((dest) => dest.id, ignore()),
-      // );
+      createMap(
+        mapper,
+        Pet,
+        PetEntity,
+        // forMember(
+        //   (pet) => pet.user.id,
+        //   // mapFrom((petEntity) => petEntity.userId),
+        //   ignore(),
+        // ),
+      );
+      createMap(
+        mapper,
+        PetEntity,
+        Pet,
+        // forMember(
+        //   (pet) => pet.userId,
+        //   // ignore(),
+        //   mapFrom((petEntity) => petEntity.user.id),
+        // ),
+      );
     };
   }
 }

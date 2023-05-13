@@ -42,7 +42,6 @@ export class NewPetScene {
 
   @On('text')
   async onText(@Message('text') name: string, @Ctx() ctx: Context) {
-    console.log(ctx, name);
     if ('text' in ctx.message && name !== '/start') {
       ctx.state.name = name;
       ctx.session.__scenes.state['name'] = name;
@@ -59,13 +58,14 @@ export class NewPetScene {
   @Action(COMMANDS.YES)
   async onYes(@Ctx() ctx: Context) {
     const pet = new PetEntity();
-    console.log('context name', ctx.session.__scenes.state['name']);
     pet.name = ctx.session.__scenes.state['name'];
-    const user = new UserEntity();
-    user.id = ctx.from.id;
-    user.pets = [pet];
-    const savedUser = await this.botService.saveUser(user);
-    console.log(savedUser);
+    let user = await this.botService.getUser(ctx.from.id);
+    if (!user) {
+      user = new UserEntity();
+      user.id = ctx.from.id;
+    }
+    user.pet = pet;
+    await this.botService.saveUser(user);
     await ctx.scene.enter(SceneList.Status);
   }
 

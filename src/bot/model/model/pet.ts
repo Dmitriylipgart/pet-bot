@@ -104,7 +104,19 @@ export class Pet {
   }
 
   public isSick() {
-    return this.health <= Pet.HEALTH.PROBLEM;
+    return this._health <= Pet.HEALTH.PROBLEM;
+  }
+
+  public isSad() {
+    return this._mood <= Pet.MOOD.PROBLEM;
+  }
+
+  public needsToWalk() {
+    return this._walk <= Pet.WALK.PROBLEM;
+  }
+
+  public isAlive() {
+    return this._health > 0;
   }
 
   public updateStatus() {
@@ -133,8 +145,8 @@ export class Pet {
   private decreaseHealth() {
     if (this.health > 0) {
       if (
-        this._fullness === Pet.FULLNESS.PROBLEM ||
-        this._walk === Pet.WALK.PROBLEM
+        this._fullness <= Pet.FULLNESS.PROBLEM ||
+        this._walk <= Pet.WALK.PROBLEM
       )
         this.decrease('health');
     }

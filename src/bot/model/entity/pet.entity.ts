@@ -14,7 +14,7 @@ export class PetEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => UserEntity, (user) => user.pets)
+  @ManyToOne(() => UserEntity, (user) => user.pet)
   @JoinColumn()
   user: UserEntity;
 
