@@ -3,15 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './model/entity/user.entity';
 import { Repository } from 'typeorm';
 import { PetEntity } from './model/entity/pet.entity';
-import { Cron, CronExpression } from '@nestjs/schedule';
+import { Cron } from '@nestjs/schedule';
 import { Telegraf } from 'telegraf';
 import { Context } from './model/interfaces/context.interface';
 import { InjectBot } from 'nestjs-telegraf';
-import { BOT_NAME } from '../shared/consts';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { Pet } from './model/model/pet';
-import { login } from 'telegraf/typings/button';
 
 @Injectable()
 export class BotService {
@@ -56,6 +54,7 @@ export class BotService {
   async walk(userId: number): Promise<PetEntity> {
     const pet = await this.getPet(userId);
     pet.increaseWalk();
+
     return await this.petRepository.save(
       this.classMapper.map(pet, Pet, PetEntity),
     );
@@ -70,9 +69,9 @@ export class BotService {
   }
 
   // update pet status job starts every 4 hours from 8am to 10pm
-  @Cron('0 8-22/4 * * *')
+  // @Cron('0 8-22/4 * * *')
   // for testing only. starts every 10 seconds
-  // @Cron('*/10 * * * * *')
+  @Cron('*/10 * * * * *')
   async updatePetStatus() {
     const petEntities = await this.petRepository.find({ relations: ['user'] });
 
@@ -106,7 +105,7 @@ export class BotService {
         if (pet.needsToWalk()) {
           this.bot.telegram.sendMessage(
             petEntity.user.id,
-            'Мне нужно погулять. \n Очено срочно.',
+            'Мне нужно погулять. \n Очень срочно.',
           );
           return;
         }

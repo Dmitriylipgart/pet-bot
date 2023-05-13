@@ -22,7 +22,7 @@ export class NewPetScene {
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Context) {
     await ctx.replyWithSticker({
-      source: 'src/assets/stickers/lick-dog.tgs',
+      source: 'src/assets/stickers/love-dog.tgs',
     });
     await ctx.replyWithHTML(
       [
