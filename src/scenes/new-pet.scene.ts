@@ -1,12 +1,4 @@
-import {
-  Action,
-  Ctx,
-  Hears,
-  Message,
-  On,
-  Scene,
-  SceneEnter,
-} from 'nestjs-telegraf';
+import { Action, Ctx, Message, On, Scene, SceneEnter } from 'nestjs-telegraf';
 import { SceneList } from '../shared/consts';
 import { BotService } from '../bot/bot.service';
 import { Context } from '../bot/model/interfaces/context.interface';
@@ -22,7 +14,7 @@ export class NewPetScene {
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Context) {
     await ctx.replyWithSticker({
-      source: 'src/assets/stickers/love-dog.tgs',
+      source: 'dist/assets/stickers/love-dog.tgs',
     });
     await ctx.replyWithHTML(
       [

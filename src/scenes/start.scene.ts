@@ -14,7 +14,7 @@ export class StartScene {
     const user = await this.botService.getUser(ctx.from.id);
     if (!user || !user.pet) {
       await ctx.replyWithSticker({
-        source: 'src/assets/stickers/hi-dog.tgs',
+        source: 'dist/assets/stickers/hi-dog.tgs',
       });
       await ctx.replyWithHTML(
         [

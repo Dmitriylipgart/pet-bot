@@ -4,6 +4,7 @@ import { BotService } from '../bot/bot.service';
 import { Context } from '../bot/model/interfaces/context.interface';
 import { replyStatus } from '../shared/utils';
 import { COMMANDS } from '../bot/bot.buttons';
+import * as fs from 'fs';
 
 @Scene(SceneList.Status)
 export class StatusScene {
@@ -15,7 +16,7 @@ export class StatusScene {
     const pet = user.pet;
     await replyStatus(
       ctx,
-      'src/assets/stickers/smile-dog.tgs',
+      'dist/assets/stickers/smile-dog.tgs',
       `👋 Привет ${ctx.from.first_name}!`,
       pet,
     );
@@ -31,7 +32,7 @@ export class StatusScene {
     const pet = await this.botService.feed(ctx.from.id);
     await replyStatus(
       ctx,
-      'src/assets/stickers/lick-dog.tgs',
+      'dist/assets/stickers/lick-dog.tgs',
       'Мммм... Вкуснятина!!!',
       pet,
     );
@@ -42,7 +43,7 @@ export class StatusScene {
     const pet = await this.botService.walk(ctx.from.id);
     await replyStatus(
       ctx,
-      'src/assets/stickers/smile-dog.tgs',
+      'dist/assets/stickers/smile-dog.tgs',
       'Классно погуляли!!! Спасибо!',
       pet,
     );
@@ -53,7 +54,7 @@ export class StatusScene {
     const pet = await this.botService.play(ctx.from.id);
     await replyStatus(
       ctx,
-      'src/assets/stickers/smile-dog.tgs',
+      'dist/assets/stickers/smile-dog.tgs',
       'Как весело!!!',
       pet,
     );
