@@ -3,7 +3,7 @@ import { PetEntity } from './pet.entity';
 
 @Entity()
 export class UserEntity {
-  @PrimaryColumn()
+  @PrimaryColumn({ type: 'bigint' })
   id: number;
 
   @OneToOne(() => PetEntity, (pet) => pet.user, {
