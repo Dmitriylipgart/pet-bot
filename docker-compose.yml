@@ -1,12 +1,17 @@
 version: "3.9"
+
 services:
   postgres:
+    container_name: postgres
     image: postgres:13.3
     environment:
-      POSTGRES_DB: "petbot"
-      POSTGRES_USER: "petbotadmin"
-      POSTGRES_PASSWORD: "petbotpassword"
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_DB: ${DB_DATABASE_NAME}
+      PG_DATA: ${PG_DATA}
     ports:
-      - "5432:5432"
+      - 5432:5432
     volumes:
-      - .nest/postgres/:/var/lib/postgresql/data/
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:
