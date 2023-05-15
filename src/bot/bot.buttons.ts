@@ -8,6 +8,8 @@ export const COMMANDS = {
   PLAY: 'play',
   YES: 'yes',
   NO: 'no',
+  STATUS: 'status',
+  START: 'start',
 };
 
 export const BUTTONS = {
@@ -18,4 +20,7 @@ export const BUTTONS = {
   PLAY: Markup.button.callback('⚽️ Поиграть', COMMANDS.PLAY),
   YES: Markup.button.callback('✅ ДА', COMMANDS.YES),
   NO: Markup.button.callback('❌ Нет', COMMANDS.NO),
+  STATUS: (name: string) => {
+    return Markup.button.callback(`🐶 Проверить ${name}`, COMMANDS.STATUS);
+  },
 };

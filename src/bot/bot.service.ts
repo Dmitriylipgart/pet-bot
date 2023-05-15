@@ -4,12 +4,13 @@ import { UserEntity } from './model/entity/user.entity';
 import { Repository } from 'typeorm';
 import { PetEntity } from './model/entity/pet.entity';
 import { Cron } from '@nestjs/schedule';
-import { Telegraf } from 'telegraf';
+import { Markup, Telegraf } from 'telegraf';
 import { Context } from './model/interfaces/context.interface';
 import { InjectBot } from 'nestjs-telegraf';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { Pet } from './model/model/pet';
+import { BUTTONS } from './bot.buttons';
 
 @Injectable()
 export class BotService {
@@ -85,6 +86,7 @@ export class BotService {
           this.bot.telegram.sendMessage(
             petEntity.user.id,
             'Кажется я заболел. \n Мне очень плохо.',
+            Markup.inlineKeyboard([BUTTONS.STATUS(petEntity.name)]),
           );
           return;
         }
@@ -92,6 +94,7 @@ export class BotService {
           this.bot.telegram.sendMessage(
             petEntity.user.id,
             'Я очень хочу кушать!!! \n Покорми меня.',
+            Markup.inlineKeyboard([BUTTONS.STATUS(petEntity.name)]),
           );
           return;
         }
@@ -99,6 +102,7 @@ export class BotService {
           this.bot.telegram.sendMessage(
             petEntity.user.id,
             '😔 Мне грустно. \n  Поиграй со мной.',
+            Markup.inlineKeyboard([BUTTONS.STATUS(petEntity.name)]),
           );
           return;
         }
@@ -106,6 +110,7 @@ export class BotService {
           this.bot.telegram.sendMessage(
             petEntity.user.id,
             'Мне нужно погулять. \n Очень срочно.',
+            Markup.inlineKeyboard([BUTTONS.STATUS(petEntity.name)]),
           );
           return;
         }

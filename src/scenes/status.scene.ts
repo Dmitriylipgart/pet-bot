@@ -14,12 +14,16 @@ export class StatusScene {
   async onSceneEnter(@Ctx() ctx: Context) {
     const user = await this.botService.getUser(ctx.from.id);
     const pet = user.pet;
-    await replyStatus(
-      ctx,
-      'dist/assets/stickers/smile-dog.tgs',
-      `👋 Привет ${ctx.from.first_name}!`,
-      pet,
-    );
+    if (pet.health > 0) {
+      await replyStatus(
+        ctx,
+        'dist/assets/stickers/smile-dog.tgs',
+        `👋 Привет ${ctx.from.first_name}!`,
+        pet,
+      );
+    } else {
+      ctx.scene.enter(SceneList.Start);
+    }
   }
 
   @Action(COMMANDS.BACK)

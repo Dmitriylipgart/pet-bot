@@ -10,7 +10,6 @@ import { TelegrafModule } from 'nestjs-telegraf';
 import { BotModule } from './bot/bot.module';
 import * as LocalSession from 'telegraf-session-local';
 import { ScheduleModule } from '@nestjs/schedule';
-import { BOT_NAME } from './shared/consts';
 // import { session } from 'telegraf';
 
 const sessions = new LocalSession({ database: 'session_db.json' });
