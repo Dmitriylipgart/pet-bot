@@ -70,7 +70,7 @@ export class BotService {
   }
 
   // update pet status job starts every 4 hours from 8am to 10pm
-  @Cron('0 8-22/4 * * *')
+  @Cron('0 8-22/3 * * *')
   // for testing only. starts every 10 seconds
   // @Cron('*/10 * * * * *')
   async updatePetStatus() {

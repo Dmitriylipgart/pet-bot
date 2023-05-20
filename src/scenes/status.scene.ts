@@ -13,8 +13,8 @@ export class StatusScene {
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Context) {
     const user = await this.botService.getUser(ctx.from.id);
-    const pet = user.pet;
-    if (pet.health > 0) {
+    const pet = user?.pet;
+    if (pet && pet.health > 0) {
       await replyStatus(
         ctx,
         'dist/assets/stickers/smile-dog.tgs',

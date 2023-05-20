@@ -83,9 +83,9 @@ export class Pet {
     this._health = value;
   }
 
-  private decrease(name: string) {
+  private decrease(name: string, value = 1): void {
     if (this[`_${name}`] > 0) {
-      this[`_${name}`] = this[`_${name}`] - 1;
+      this[`_${name}`] = this[`_${name}`] - value;
     }
   }
 
@@ -139,7 +139,7 @@ export class Pet {
   }
 
   private decreaseWalk() {
-    this.decrease('walk');
+    this.decrease('walk', 2);
   }
 
   private decreaseHealth() {
